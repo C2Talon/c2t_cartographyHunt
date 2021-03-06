@@ -27,7 +27,7 @@ boolean c2t_cartographyHunt(location loc,monster mon) {
 		//check for the correct non-combat
 		buf = visit_url(loc.to_url(),false,true);
 		if (!buf.contains_text('name="whichchoice" value="1435"') || !buf.contains_text("Leading Yourself Right to Them"))
-			abort(`Wrong thing came up when using Map the Monsters at {loc} with {mon}`);
+			abort("Wrong thing came up when using Map the Monsters at "+loc+" with "+mon);
 
 		//select choice
 		buf = visit_url("choice.php?pwd&whichchoice=1435&option=1&heyscriptswhatsupwinkwink="+mon.to_int(),true,true);
@@ -36,12 +36,12 @@ boolean c2t_cartographyHunt(location loc,monster mon) {
 		matcher combat = create_matcher("<!--\\s+MONSTERID:\\s+(\\d+)\\s+-->",buf);
 		if (combat.find()) {
 			if (combat.group(1).to_int() == mon.to_int()) {
-				print(`Should be in combat with {mon}`,"blue");
+				print("Should be in combat with "+mon,"blue");
 				return true;
 			}
 			abort("Entered combat with the wrong monster somehow");
 		}
-		abort(`Did not enter combat using Map the Monsters at {loc} with {mon}`);
+		abort("Did not enter combat using Map the Monsters at "+loc+" with "+mon);
 	}
 	//skill use exhausted
 	else if (get_property('_monstersMapped').to_int() >= 3) {
